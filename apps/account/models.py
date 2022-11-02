@@ -27,5 +27,34 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
         return self._create(username, email, password, **extra_fields)
 
+class User(AbstractBaseUser):
+    username = models.CharField('Username', max_length=50, primary_key=True)
+    email = models.EmailField('Email', max_length=255. unique=True)
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    activation_code = models.CharField(max_length=8, blank=True)
 
+    objects = UserManager
 
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    def _str__(self) -> str:
+        return self.username
+
+    def has_module_perms(self, app_label):
+        return self.is_staff
+        
+    def has_perm(self, obj=None):
+        return self.is_staff
+
+    def create_activation_code(self):
+        code = get_random_string(length=8)
+        if User.objects.filter(activation_code=code).exists():
+            self.create_activation_code()
+        self.activation_code = code
+        self.save()
+
+    class Meta:
+        verbose_name = 'user'
+        verbose_name_plural = 'Users'
