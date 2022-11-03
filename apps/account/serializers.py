@@ -1,4 +1,3 @@
-from django.conf import settings
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
@@ -11,7 +10,7 @@ User = get_user_model()
 def email_validator(email):
         if not User.objects.filter(email=email).exists():
             raise serializers.ValidationError(
-                'User with this email does not exist'
+                'Пользователя с таким email не существует'
             )
         return email
 
@@ -64,7 +63,7 @@ class PasswordChangeSerializer(serializers.Serializer):
     def set_new_password(self):
         user = self.context.get('request').user
         passowrd = self.validated_data.get('new_password')
-        user.set_password(password)
+        user.set_password('password')
         user.save()
 
 class RestorePasswordSerializer(serializers.Serializer):
@@ -118,3 +117,5 @@ class SetRestorePasswordSerializer(serializers.Serializer):
         user.set_password(new_password)
         user.activation_code = ''
         user.save()
+
+

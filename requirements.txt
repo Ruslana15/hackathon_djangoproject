@@ -10,3 +10,4 @@ psycopg2-binary
 python-slugify
 celery
 redis
+socket #для создания онлайн-чата

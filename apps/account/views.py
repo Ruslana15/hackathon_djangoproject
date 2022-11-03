@@ -8,12 +8,12 @@ from rest_framework import status
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 
-from .serializers. import (
+from .serializers import (
     SetRestorePasswordSerializer,
     UserRegistrationSerializer,
     PasswordChangeSerializer,
     RestorePasswordSerializer,
-    SetRestorePasswordSerialize
+    SetRestorePasswordSerializer
     )
 
 User = get_user_model
@@ -41,7 +41,7 @@ class AccountActivationView(APIView):
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def post(self, request: Reguest):
+    def post(self, request: Request):
         serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.set_new_password()
@@ -80,4 +80,4 @@ class DeleteAccountView(APIView):
             'Аккаунт успешно удален!',
             status=status.HTTP_204_NO_CONTENT
         )
-        
+
